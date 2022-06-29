@@ -1,10 +1,7 @@
 import random
 import os
 
-def word_guesser():
-
-    # Get possible words
-    words = get_words_list()
+def play(hidden_word):
 
     # Initialize game variables
     print("<<< GAME STARTING UP >>>\n")
@@ -12,8 +9,7 @@ def word_guesser():
     lives = 7 # Lives left
     round = 1 # Round the player is on
     game_over = False # Game over boolean
-    hidden_word = words[random.randint(0, len(words)-1)] # Word that user is trying to guess
-    print(f'Hidden word: {hidden_word}\n') # FOR DEBUG PURPOSES ONLY
+    #print(f'Hidden word: {hidden_word}\n') # FOR DEBUG PURPOSES ONLY
 
     print('<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>\n')
 
@@ -25,7 +21,7 @@ def word_guesser():
         else:
             print(f'ROUND {round}: You have {lives} life\n')
 
-        # Get if user wants
+        # Get what user wants
         print("Do you want to guess the word or a letter?")
         print("  (1) Guess the word")
         print("  (2) Guess a letter\n")
@@ -80,7 +76,6 @@ def word_guesser():
                 elif (len(input_3) == 1):
                     if (input_3.isalpha()):
                         input_3_valid = True
-                        print("Good choice!\n")
                         guessed_chars.append(input_3.lower())
                     else:
                         print(f'Your guess, \'{input_3}\', is not a letter. Please choose an alphabetic character.\n')
@@ -113,7 +108,9 @@ def word_guesser():
         round += 1
         lose_pt = False
     
-    print("<<< GAME SHUTTING DOWN >>>")
+    print("<<< GAME SHUTTING DOWN >>>\n")
+
+    return game_over # True if game was won
 
 def get_known_letters(hidden_word, guessed_chars):
     revealed_word = ''
@@ -136,4 +133,77 @@ def get_words_list():
         words[i] = words[i].strip('\n')
     return words
 
-word_guesser()
+def run_game():
+
+    # Set up game meta stats
+    wins = 0
+    losses = 0
+    words_used = []
+    keep_playing = True
+    words = get_words_list()
+    #words = ['apple', 'banana', 'orange'] # For debug purposes only
+
+    # Display welcome message
+    print('<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>\n')
+    print('WELCOME TO JACK\'S WORD GUESSER GAME!!\n')
+    print('The point of this game is to guess the secret word either by guessing the word')
+    print('or its characters. You are allowed 7 incorrect attempts before you lose. Are')
+    print('you up for the challenge?\n')
+    print('<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>\n')
+
+    # Start game run loop
+    while (keep_playing):
+        
+        # Get current score
+        print('SCOREBOARD:')
+        print(f'  Wins: {wins}')
+        print(f'  Losses: {losses}\n')
+
+        # Get what user wants
+        print("What do you want to do next?")
+        if (len(words_used) == len(words)):
+            print("  (X) Cannot play anymore")
+        else:
+            print("  (1) Play")
+        print("  (2) Exit\n")
+
+        # Get user input
+        what_next_valid = False
+        what_next = 0
+        while (not what_next_valid):
+            try:
+                what_next = int(input("  Selection: "))
+                print()
+                if ((what_next == 1 and len(words_used) != len(words)) or what_next == 2):
+                    what_next_valid = True
+                else:
+                    if (what_next == 1 and len(words_used) == len(words)):
+                        print("There are no more words to play!")
+                    else:
+                        print("Please select either 1 or 2!\n")
+            except:
+                print('Please enter an integer!\n')
+        
+        # Exit game option
+        if (what_next == 2):
+            print('Auf Wiedersehen! Play again soon!\n')
+            keep_playing = False
+
+        # Play game option
+        else:
+            new_word = True
+            while (new_word):
+                hidden_word = words[random.randint(0, len(words)-1)]
+                if (hidden_word not in words_used):
+                    new_word = False
+            words_used.append(hidden_word)
+            win_loss = play(hidden_word)
+            if (win_loss):
+                wins += 1
+            else:
+                losses += 1
+
+        print('<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>\n')
+
+
+run_game()
