@@ -39,6 +39,7 @@ Words list cleaned using the functions of ***clean-words.py***.
 
 Diagram description of the flow of input for the game. Made using ***flowchart.fun***.
 
+![image](https://user-images.githubusercontent.com/105175430/176504307-50578c21-d840-4ff1-9194-de78e5d3f7ae.png)
 
 ## Important Functions of *word_guesser.py*
 **run_game()**: Runs the game for the user. This function allows the player to play the game multiple times while keeping score. This function is implicitly called by ***word_guesser.py***.
