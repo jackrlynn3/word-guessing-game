@@ -1,12 +1,21 @@
+import random
+import os
+
 def word_guesser():
-    
-    # Initialize game variables\
+
+    # Get possible words
+    words = get_words_list()
+
+    # Initialize game variables
     print("<<< GAME STARTING UP >>>\n")
     guessed_chars = [] # List of already guessed letters
     lives = 7 # Lives left
     round = 1 # Round the player is on
     game_over = False # Game over boolean
-    hidden_word = "Bananas" # Word that user is trying to guess
+    hidden_word = words[random.randint(0, len(words)-1)] # Word that user is trying to guess
+    print(f'Hidden word: {hidden_word}\n') # FOR DEBUG PURPOSES ONLY
+
+    print('<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>\n')
 
     while (lives > 0 and not game_over):
         
@@ -47,7 +56,7 @@ def word_guesser():
         if (input_1 == 1):
             
             # Get user guess
-            input_2 = input("Make guess for word: ")
+            input_2 = input("Make guess for the word: ")
             print()
 
             # Check to see if guess is correct
@@ -63,7 +72,8 @@ def word_guesser():
             input_3_valid = False
             input_3 = 0
             while (not input_3_valid):
-                input_3 = input("  Selection: ")
+                print(f'Letters: {str(guessed_chars)}\n')
+                input_3 = input("Make a guess for the letter: ")
                 print()
                 if (input_3.lower() in guessed_chars):
                     print(f'You\'ve already guessed \'{input_3}\'. Please choose a different character.\n')
@@ -97,6 +107,8 @@ def word_guesser():
         if (win):
             print(f'You have won the game! The secret word is: {hidden_word}.\n\nWONDERFUL JOB!\n')
             game_over = True
+
+        print('<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>-<>\n')
         
         round += 1
         lose_pt = False
@@ -115,5 +127,13 @@ def get_known_letters(hidden_word, guessed_chars):
     
     # Return revealed word
     return revealed_word
+
+def get_words_list():
+    os.chdir(os.path.dirname(__file__))
+    words = open('words-cleaned.txt', 'r').readlines()
+    # Strip out newline characters
+    for i in range(len(words)):
+        words[i] = words[i].strip('\n')
+    return words
 
 word_guesser()
