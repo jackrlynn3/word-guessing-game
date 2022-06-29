@@ -1,0 +1,18 @@
+[.circle] Player starts game
+  [.diamond] [guess] Does the player want to guess the word or a letter?
+    Guess the word: Guess the word
+      [.diamond] Is the guess correct?
+        Yes: [.circle] [win] Player wins!
+        No: [.diamond] [pt check] Does the player have more than 1 pt?
+          Yes: Subtract 1 pt
+            (guess)
+          No: [.circle] Player loses!
+    Guess a letter: [guess letter] Guess a letter
+      [.diamond] Has the letter been guessed before?
+        Yes: (guess letter)
+        No: [.diamond] Is the letter in the word?
+          No: (pt check)
+          Yes: Reveal new letters in word
+            [.diamond] Are all the letters revealed?
+              Yes: (win)
+              No: (guess)
